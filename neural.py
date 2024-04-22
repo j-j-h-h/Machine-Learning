@@ -22,10 +22,8 @@ def init():
 def flatten(arr):
     output = []
     for a in arr:
-        temp = []
         for item in a:
-            temp.append(item)
-        output.append(temp)
+            output.append(item)
     return output
 
 def activation(arr):
@@ -37,16 +35,13 @@ def cost():
     pass
 
 def forward_prop(x, W1, b1, W2, b2):
-    #combine the W's and b's into matrices
-    #to allow easy looping.
-    #take previous x and np.multiply with W[n]
-    #then np.add b[n]
-    #add these together for each node then put
-    #through sigmoid activation
-    #add result to x and repeat
-    #return x
-    for n in range(len(W1)):
-        pass
+    x1 = []
+    for i in range(10):
+        x1.append(activation(sum(np.add(np.multiply(x,W1[i]),b1[i]))))
+    x2 = []
+    for i in range(10):
+        x2.append(activation(sum(np.add(np.multiply(x1,W2[i]),b2[i]))))
+    return x1, x2
 
 def back_prop():
     pass
@@ -55,7 +50,12 @@ def train():
     for n in range(0, NUM_IMG-BATCHES, BATCHES):
         W1, b1, W2, b2 = init()
         for i in range(n, n+BATCHES):
-            x = [flatten(x_train[i])]
-            #get x from forward
-            #calculate cost
-            #do backprop
+            x = flatten(x_train[i])
+            x1, x2 = forward_prop(x,W1,b1,W2,b2)
+            cost = 0
+            for j in range(10):
+                if j == y_train[i]:
+                    cost += (1 - x2[j])**2
+                else:
+                    cost += (x2[j])**2
+            cost /= 20
